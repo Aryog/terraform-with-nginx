@@ -113,9 +113,10 @@ resource "azurerm_linux_virtual_machine" "example" {
   }
 }
 
-# Custom Script Extension to Install NGINX and Custom Page
-resource "azurerm_virtual_machine_extension" "nginx_install" {
-  name                 = "nginx-install"
+
+# Upload and execute Hadoop installation script
+resource "azurerm_virtual_machine_extension" "hadoop_install" {
+  name                 = "hadoop-install"
   virtual_machine_id   = azurerm_linux_virtual_machine.example.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
@@ -123,7 +124,29 @@ resource "azurerm_virtual_machine_extension" "nginx_install" {
 
   settings = <<SETTINGS
     {
-      "commandToExecute": "apt-get update && apt-get install -y nginx && echo '<h1> Hi, I am Yogesh Aryal </h1>' > /var/www/html/index.html"
+      "commandToExecute": "mkdir -p /tmp/hadoop-install && cd /tmp/hadoop-install && wget https://gist.githubusercontent.com/Aryog/38d882d995d6a187207044011fa86de0/raw/cd2c910049f279fa5d57f05278636b10556c1fa7/hadoop-install.sh -O hadoop-install.sh && chmod +x hadoop-install.sh && ./hadoop-install.sh"
     }
   SETTINGS
+  tags = {
+    environment = "production"
+    component   = "hadoop"
+  }
+
 }
+
+# Update Network Security Group to allow Hadoop service ports
+resource "azurerm_network_security_rule" "hadoop_services" {
+  name                        = "AllowHadoopServices"
+  priority                    = 1010
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_ranges     = ["9870", "8088", "19888"]
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.example.name
+}
+
+
