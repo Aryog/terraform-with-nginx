@@ -124,7 +124,7 @@ resource "azurerm_virtual_machine_extension" "hadoop_install" {
 
   settings = <<SETTINGS
     {
-      "commandToExecute": "mkdir -p /tmp/hadoop-install && cd /tmp/hadoop-install && wget https://gist.githubusercontent.com/Aryog/38d882d995d6a187207044011fa86de0/raw/cd2c910049f279fa5d57f05278636b10556c1fa7/hadoop-install.sh -O hadoop-install.sh && chmod +x hadoop-install.sh && ./hadoop-install.sh"
+      "commandToExecute": "mkdir -p /tmp/hadoop-install && cd /tmp/hadoop-install && wget https://gist.githubusercontent.com/Aryog/38d882d995d6a187207044011fa86de0/raw/c363388c9262c8a1318310b471e7963216e4a63a/hadoop-install.sh -O hadoop-install.sh && chmod +x hadoop-install.sh && ./hadoop-install.sh"
     }
   SETTINGS
   tags = {

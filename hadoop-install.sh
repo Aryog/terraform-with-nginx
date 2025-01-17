@@ -9,7 +9,7 @@ sudo usermod -aG sudo hadoop
 
 # Update and install dependencies
 sudo apt-get update
-sudo apt-get install -y openjdk-11-jdk wget nano net-tools
+sudo apt-get install -y openjdk-8-jdk wget nano net-tools
 
 # Set Java and Hadoop versions
 # Use readlink to correctly set JAVA_HOME
@@ -31,7 +31,7 @@ if [ ! -d "$JAVA_HOME" ]; then
     exit 1
 fi
 
-HADOOP_VERSION="3.3.6"
+HADOOP_VERSION="3.4.0"
 HADOOP_HOME="/opt/hadoop"
 
 # Verify Java installation
